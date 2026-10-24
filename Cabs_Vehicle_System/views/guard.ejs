@@ -1,0 +1,83 @@
+<%- include('partials/top', {title:'Security Guard', active:'check'}) %>
+
+    <div class="box">
+        <h2>SEARCH PLATE NUMBER</h2>
+        <form action="/guard" method="GET">
+            <input name="plate" type="text" placeholder="Enter Plate Number" value="<%= plate %>" maxlength="15" required autofocus>
+            <button type="submit">Search</button>
+        </form>
+
+        <% if(searched && vehicle === null){ %>
+            <p class="msg red">Plate number not found. Vehicle is NOT registered.</p>
+            <p>Is this a visitor? <a href="/guard/visitors">Open the Visitor Logbook</a></p>
+        <% } %>
+
+        <% if(vehicle !== null){ %>
+            <table>
+                <tr><th>PLATE</th><td><%= vehicle.plate %></td></tr>
+                <tr><th>OWNER</th><td><%= vehicle.fullname %></td></tr>
+                <tr><th>VEHICLE</th><td><%= vehicle.color %> <%= vehicle.brand %> (<%= vehicle.type %>)</td></tr>
+                <tr><th>STATUS</th><td><span class="badge <%= vehicle.status %>"><%= vehicle.status %></span></td></tr>
+                <tr><th>LOCATION</th><td><%= lastAction === 'ENTRY' ? 'INSIDE' : 'OUTSIDE' %></td></tr>
+            </table>
+
+            <% if(lastAction === 'ENTRY'){ %>
+                <%# a vehicle that is inside can always leave, even if its approval was removed %>
+                <% if(vehicle.status !== 'Approved'){ %>
+                    <p class="msg red">Vehicle is <%= vehicle.status %> but is still inside. It may leave.</p>
+                <% } %>
+                <form action="/gate" method="POST" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <input type="hidden" name="id" value="<%= vehicle.idnum %>">
+                    <input type="hidden" name="action" value="EXIT">
+                    <input type="hidden" name="back" value="<%= back %>">
+                    <button type="submit" class="btn red big">RECORD EXIT</button>
+                </form>
+            <% } else if(vehicle.status === 'Approved'){ %>
+                <form action="/gate" method="POST" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <input type="hidden" name="id" value="<%= vehicle.idnum %>">
+                    <input type="hidden" name="action" value="ENTRY">
+                    <input type="hidden" name="back" value="<%= back %>">
+                    <button type="submit" class="btn green big">RECORD ENTRY</button>
+                </form>
+            <% } else { %>
+                <p class="msg red">NOT ALLOWED. Vehicle is <%= vehicle.status %>.</p>
+            <% } %>
+        <% } %>
+    </div>
+
+    <div class="box">
+        <h2>RECENT GATE ACTIVITY</h2>
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>PLATE</th>
+                    <th>ACTION</th>
+                    <th>DATE &amp; TIME</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    if(logs.length > 0){
+                        logs.forEach((data)=>{
+                %>
+                <tr>
+                    <td><%= data.plate %></td>
+                    <td><span class="badge <%= data.action %>"><%= data.action %></span></td>
+                    <td><%= fmt(data.log_time) %></td>
+                </tr>
+                <%
+                        })
+                    } else {
+                %>
+                <tr><td colspan="3">No activity yet.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>

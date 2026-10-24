@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/list.css">
+    <title><%= title %></title>
+</head>
+<body>
+
+    <%
+        const nav = {
+            student: [['/student','My Vehicles','vehicles'], ['/student/history','Gate History','history']],
+            guard:   [['/guard','Gate Check','check'], ['/guard/vehicles','Registered Vehicles','vehicles'], ['/guard/visitors','Visitor Logbook','visitors']],
+            admin:   [['/admin','Vehicle Requests','requests'], ['/admin/history','Gate History','history'], ['/admin/inside','Inside Now','inside']]
+        }[user.role];
+    %>
+
+    <div class="topbar">
+        <span><%= user.role.toUpperCase() %>: <%= user.fullname %></span>
+        <form action="/logout" method="POST" class="inline">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <button type="submit" class="linkbtn">Logout</button>
+        </form>
+    </div>
+
+    <div class="tabs">
+        <% nav.forEach((n)=>{ %>
+            <a href="<%= n[0] %>" class="<%= active === n[2] ? 'on' : '' %>"><%= n[1] %></a>
+        <% }) %>
+    </div>

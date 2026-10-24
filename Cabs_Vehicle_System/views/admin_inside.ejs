@@ -1,0 +1,51 @@
+<%- include('partials/top', {title:'Inside Now', active:'inside'}) %>
+
+    <div class="box">
+        <h2>REGISTERED VEHICLES INSIDE (<%= cars.length %>)</h2>
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr><th>PLATE</th><th>OWNER</th><th>VEHICLE</th><th>ENTERED</th></tr>
+            </thead>
+            <tbody>
+                <% if(cars.length > 0){ cars.forEach((c)=>{ %>
+                <tr>
+                    <td><%= c.plate %></td>
+                    <td><%= c.fullname %></td>
+                    <td><%= c.color %> <%= c.brand %> (<%= c.type %>)</td>
+                    <td><%= fmt(c.log_time) %></td>
+                </tr>
+                <% }) } else { %>
+                <tr><td colspan="4">No registered vehicle inside.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>VISITORS INSIDE (<%= visitors.length %>)</h2>
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr><th>VISITOR</th><th>PLATE</th><th>VISITING</th><th>PURPOSE</th><th>TIME IN</th></tr>
+            </thead>
+            <tbody>
+                <% if(visitors.length > 0){ visitors.forEach((v)=>{ %>
+                <tr>
+                    <td><%= v.visitor_name %><br><small><%= v.contact %></small></td>
+                    <td><%= v.plate %></td>
+                    <td><%= v.person_visited %></td>
+                    <td><%= v.purpose %></td>
+                    <td><%= fmt(v.time_in) %></td>
+                </tr>
+                <% }) } else { %>
+                <tr><td colspan="5">No visitor inside.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>

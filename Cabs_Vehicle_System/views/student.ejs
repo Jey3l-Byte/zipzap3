@@ -1,0 +1,64 @@
+<%- include('partials/top', {title:'Student', active:'vehicles'}) %>
+
+    <div class="box">
+        <h2>REGISTER VEHICLE</h2>
+        <form action="/vehicle" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input name="plate" type="text" placeholder="Plate Number" maxlength="15" required>
+            <select name="type" required>
+                <option value="">-- Vehicle Type --</option>
+                <option>Car</option>
+                <option>Motorcycle</option>
+                <option>Tricycle</option>
+                <option>Other</option>
+            </select>
+            <input name="brand" type="text" placeholder="Brand" maxlength="50" required>
+            <input name="color" type="text" placeholder="Color" maxlength="30" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <h2>MY VEHICLES</h2>
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>PLATE</th>
+                    <th>TYPE</th>
+                    <th>BRAND</th>
+                    <th>COLOR</th>
+                    <th>STATUS</th>
+                    <th>LOCATION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    if(vehicle.length > 0){
+                        vehicle.forEach((data)=>{
+                %>
+                <tr>
+                    <td><%= data.plate %></td>
+                    <td><%= data.type %></td>
+                    <td><%= data.brand %></td>
+                    <td><%= data.color %></td>
+                    <td><span class="badge <%= data.status %>"><%= data.status %></span></td>
+                    <td>
+                        <% if(data.status === 'Approved'){ %>
+                            <span class="badge <%= data.last_action === 'ENTRY' ? 'Inside' : 'Outside' %>"><%= data.last_action === 'ENTRY' ? 'INSIDE' : 'OUTSIDE' %></span>
+                        <% } else { %> - <% } %>
+                    </td>
+                </tr>
+                <%
+                        })
+                    } else {
+                %>
+                <tr><td colspan="6">No vehicle registered yet.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>

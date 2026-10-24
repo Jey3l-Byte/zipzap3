@@ -1,0 +1,66 @@
+<%- include('partials/top', {title:'Gate History', active:'history'}) %>
+
+    <div class="box wide">
+        <h2>GATE HISTORY</h2>
+
+        <form action="/admin/history" method="GET" class="filters">
+            <select name="type">
+                <option value="">All types</option>
+                <option value="Registered" <%= f.type === 'Registered' ? 'selected' : '' %>>Registered vehicles</option>
+                <option value="Visitor" <%= f.type === 'Visitor' ? 'selected' : '' %>>Visitors</option>
+            </select>
+            <select name="action">
+                <option value="">Entry &amp; Exit</option>
+                <option value="ENTRY" <%= f.action === 'ENTRY' ? 'selected' : '' %>>Entry only</option>
+                <option value="EXIT" <%= f.action === 'EXIT' ? 'selected' : '' %>>Exit only</option>
+            </select>
+            <label>From <input type="date" name="from" value="<%= f.from %>"></label>
+            <label>To <input type="date" name="to" value="<%= f.to %>"></label>
+            <input type="text" name="q" value="<%= f.q %>" placeholder="Plate or name" maxlength="50">
+            <button type="submit">Filter</button>
+            <a class="btn grey" href="/admin/history">Reset</a>
+            <a class="btn blue" href="/admin/history.csv?<%= qs %>">Export CSV</a>
+        </form>
+
+        <p class="note"><%= logs.length %> record<%= logs.length === 1 ? '' : 's' %><%= logs.length === 500 ? ' (latest 500 shown, the CSV has everything that matches)' : '' %></p>
+
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>DATE &amp; TIME</th>
+                    <th>TYPE</th>
+                    <th>PLATE</th>
+                    <th>NAME</th>
+                    <th>ACTION</th>
+                    <th>GUARD</th>
+                    <th>DETAILS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    if(logs.length > 0){
+                        logs.forEach((data)=>{
+                %>
+                <tr>
+                    <td><%= fmt(data.ts) %></td>
+                    <td><span class="badge <%= data.kind %>"><%= data.kind %></span></td>
+                    <td><%= data.plate %></td>
+                    <td><%= data.who %></td>
+                    <td><span class="badge <%= data.action %>"><%= data.action %></span></td>
+                    <td><%= data.guard %></td>
+                    <td class="left"><small><%= data.details %></small></td>
+                </tr>
+                <%
+                        })
+                    } else {
+                %>
+                <tr><td colspan="7">No records match.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>

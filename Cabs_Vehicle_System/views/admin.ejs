@@ -1,0 +1,69 @@
+<%- include('partials/top', {title:'Admin', active:'requests'}) %>
+
+    <div class="box">
+        <h2>VEHICLE REQUESTS</h2>
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>OWNER</th>
+                    <th>PLATE</th>
+                    <th>TYPE</th>
+                    <th>BRAND</th>
+                    <th>COLOR</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    if(vehicle.length > 0){
+                        vehicle.forEach((data)=>{
+                            const inside = data.last_action === 'ENTRY';
+                %>
+                <tr>
+                    <td><%= data.fullname %></td>
+                    <td><%= data.plate %></td>
+                    <td><%= data.type %></td>
+                    <td><%= data.brand %></td>
+                    <td><%= data.color %></td>
+                    <td>
+                        <span class="badge <%= data.status %>"><%= data.status %></span>
+                        <% if(inside){ %><span class="badge Inside">INSIDE</span><% } %>
+                    </td>
+                    <td>
+                        <% if(inside){ %>
+                            <small>Exit first</small>
+                        <% } else { %>
+                            <% if(data.status !== 'Approved'){ %>
+                                <form action="/review" method="POST" class="inline" onsubmit="return confirm('Approve this vehicle?')">
+                                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                                    <input type="hidden" name="id" value="<%= data.idnum %>">
+                                    <input type="hidden" name="status" value="Approved">
+                                    <button type="submit" class="btn green">APPROVE</button>
+                                </form>
+                            <% } %>
+                            <% if(data.status !== 'Rejected'){ %>
+                                <form action="/review" method="POST" class="inline" onsubmit="return confirm('<%= data.status === 'Approved' ? 'Revoke approval of' : 'Reject' %> this vehicle?')">
+                                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                                    <input type="hidden" name="id" value="<%= data.idnum %>">
+                                    <input type="hidden" name="status" value="Rejected">
+                                    <button type="submit" class="btn red"><%= data.status === 'Approved' ? 'REVOKE' : 'REJECT' %></button>
+                                </form>
+                            <% } %>
+                        <% } %>
+                    </td>
+                </tr>
+                <%
+                        })
+                    } else {
+                %>
+                <tr><td colspan="7">No requests yet.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>

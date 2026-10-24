@@ -1,0 +1,49 @@
+<%- include('partials/top', {title:'My Gate History', active:'history'}) %>
+
+    <div class="box">
+        <h2>MY GATE HISTORY</h2>
+        <form action="/student/history" method="GET">
+            <select name="vehicle">
+                <option value="">All my vehicles</option>
+                <% mine.forEach((m)=>{ %>
+                    <option value="<%= m.idnum %>" <%= pick === m.idnum ? 'selected' : '' %>><%= m.plate %></option>
+                <% }) %>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>DATE &amp; TIME</th>
+                    <th>PLATE</th>
+                    <th>ACTION</th>
+                    <th>RECORDED BY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    if(logs.length > 0){
+                        logs.forEach((data)=>{
+                %>
+                <tr>
+                    <td><%= fmt(data.log_time) %></td>
+                    <td><%= data.plate %></td>
+                    <td><span class="badge <%= data.action %>"><%= data.action %></span></td>
+                    <td><%= data.guard %></td>
+                </tr>
+                <%
+                        })
+                    } else {
+                %>
+                <tr><td colspan="4">No gate activity yet.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+        <% if(logs.length === 200){ %><p class="note">Showing the latest 200 records.</p><% } %>
+    </div>
+
+</body>
+</html>

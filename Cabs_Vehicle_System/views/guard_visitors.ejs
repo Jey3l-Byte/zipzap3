@@ -1,0 +1,85 @@
+<%- include('partials/top', {title:'Visitor Logbook', active:'visitors'}) %>
+
+    <div class="box">
+        <h2>VISITOR TIME IN</h2>
+        <form action="/visitor/in" method="POST" class="grid">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input name="visitor_name" type="text" placeholder="Visitor full name" maxlength="100" required>
+            <input name="plate" type="text" placeholder="Plate number" maxlength="15" required>
+            <select name="id_shown" required>
+                <option value="">-- ID shown --</option>
+                <% idTypes.forEach((t)=>{ %><option><%= t %></option><% }) %>
+            </select>
+            <input name="contact" type="tel" placeholder="Contact number" maxlength="30" required>
+            <input name="person_visited" type="text" placeholder="Person / office to visit" maxlength="100" required>
+            <input name="purpose" type="text" placeholder="Purpose of visit" maxlength="150" required>
+            <button type="submit">Record Time In</button>
+        </form>
+    </div>
+
+    <div class="box wide">
+        <h2>VISITORS INSIDE (<%= inside.length %>)</h2>
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>VISITOR</th>
+                    <th>PLATE</th>
+                    <th>ID SHOWN</th>
+                    <th>VISITING</th>
+                    <th>PURPOSE</th>
+                    <th>TIME IN</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(inside.length > 0){ inside.forEach((v)=>{ %>
+                <tr>
+                    <td><%= v.visitor_name %><br><small><%= v.contact %></small></td>
+                    <td><%= v.plate %></td>
+                    <td><%= v.id_shown %></td>
+                    <td><%= v.person_visited %></td>
+                    <td><%= v.purpose %></td>
+                    <td><%= fmt(v.time_in) %></td>
+                    <td>
+                        <form action="/visitor/out" method="POST" class="inline" onsubmit="return confirm('Record time out for this visitor?')">
+                            <input type="hidden" name="_csrf" value="<%= csrf %>">
+                            <input type="hidden" name="id" value="<%= v.idnum %>">
+                            <button type="submit" class="btn red">TIME OUT</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) } else { %>
+                <tr><td colspan="7">No visitor inside.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="box wide">
+        <h2>RECENTLY LEFT</h2>
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr><th>VISITOR</th><th>PLATE</th><th>VISITING</th><th>TIME IN</th><th>TIME OUT</th></tr>
+            </thead>
+            <tbody>
+                <% if(recent.length > 0){ recent.forEach((v)=>{ %>
+                <tr>
+                    <td><%= v.visitor_name %></td>
+                    <td><%= v.plate %></td>
+                    <td><%= v.person_visited %></td>
+                    <td><%= fmt(v.time_in) %></td>
+                    <td><%= fmt(v.time_out) %></td>
+                </tr>
+                <% }) } else { %>
+                <tr><td colspan="5">No visitor has left yet.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<%- include('partials/top', {title:'Registered Vehicles', active:'vehicles'}) %>
+
+    <div class="box wide">
+        <h2>REGISTERED VEHICLES (APPROVED)</h2>
+
+        <form action="/guard/vehicles" method="GET" class="filters">
+            <input type="text" name="q" value="<%= search %>" placeholder="Plate, owner or brand" maxlength="50">
+            <select name="loc">
+                <option value="">Inside &amp; Outside</option>
+                <option value="INSIDE" <%= loc === 'INSIDE' ? 'selected' : '' %>>Inside only</option>
+                <option value="OUTSIDE" <%= loc === 'OUTSIDE' ? 'selected' : '' %>>Outside only</option>
+            </select>
+            <button type="submit">Filter</button>
+            <a class="btn grey" href="/guard/vehicles">Reset</a>
+        </form>
+
+        <p class="note"><%= vehicles.length %> shown &middot; <%= insideCount %> currently inside (in this search)</p>
+
+        <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>PLATE</th>
+                    <th>OWNER</th>
+                    <th>VEHICLE</th>
+                    <th>LOCATION</th>
+                    <th>LAST ACTIVITY</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(vehicles.length > 0){ vehicles.forEach((v)=>{ const inside = v.last_action === 'ENTRY'; %>
+                <tr>
+                    <td><%= v.plate %></td>
+                    <td><%= v.fullname %></td>
+                    <td><%= v.color %> <%= v.brand %> (<%= v.type %>)</td>
+                    <td><span class="badge <%= inside ? 'Inside' : 'Outside' %>"><%= inside ? 'INSIDE' : 'OUTSIDE' %></span></td>
+                    <td><%= v.last_time ? fmt(v.last_time) : '-' %></td>
+                    <td>
+                        <form action="/gate" method="POST" class="inline">
+                            <input type="hidden" name="_csrf" value="<%= csrf %>">
+                            <input type="hidden" name="id" value="<%= v.idnum %>">
+                            <input type="hidden" name="action" value="<%= inside ? 'EXIT' : 'ENTRY' %>">
+                            <input type="hidden" name="back" value="<%= back %>">
+                            <button type="submit" class="btn <%= inside ? 'red' : 'green' %>"><%= inside ? 'EXIT' : 'ENTRY' %></button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) } else { %>
+                <tr><td colspan="6">No vehicles found.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>

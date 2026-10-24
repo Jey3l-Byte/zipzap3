@@ -1,0 +1,13 @@
+{
+  "name": "cabs-vehicle-system",
+  "version": "2.0.0",
+  "main": "app.js",
+  "scripts": { "start": "node app.js" },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "mysql": "^2.18.1"
+  }
+}

@@ -1,0 +1,162 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #a1d0c8;
+    margin: 0;
+    padding-bottom: 40px;
+}
+
+.topbar {
+    background-color: #2f6f65;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.topbar a {
+    color: white;
+}
+
+.box {
+    background-color: rgb(249, 249, 249);
+    width: 90%;
+    max-width: 800px;
+    margin: 25px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    color: #2f6f65;
+    font-family: monospace;
+    margin-top: 0;
+}
+
+form input, form select {
+    padding: 10px;
+    margin: 5px 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    padding: 10px 20px;
+    background-color: #03c73ea2;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #05802a;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    margin-top: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+thead, th {
+    background-color: lab(74.7% -19.17 -13.61);
+    color: white;
+}
+
+th {
+    padding: 12px;
+    text-align: center;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    color: #0b0606;
+}
+
+.btn {
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.btn.green { background-color: #05802a; }
+.btn.red { background-color: rgb(223, 24, 44); }
+.btn.big {
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 16px;
+    padding: 12px 25px;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: white;
+}
+
+.badge.Pending { background-color: #e0a800; }
+.badge.Approved { background-color: #05802a; }
+.badge.Rejected { background-color: rgb(223, 24, 44); }
+
+.msg { font-weight: bold; }
+.msg.red { color: rgb(223, 24, 44); }
+
+/* ---------- v2 additions ---------- */
+
+.box.wide { max-width: 1100px; }
+.scroll { overflow-x: auto; }              /* tables scroll on phones instead of breaking the page */
+.left { text-align: left; }
+.note { color: #555; font-size: 13px; }
+small { color: #555; }
+form.inline { display: inline; margin: 0; padding: 0; }
+
+/* top bar logout button looks like a link */
+.topbar .linkbtn {
+    background: none; border: none; color: white; cursor: pointer;
+    text-decoration: underline; font-size: 16px; padding: 0;
+}
+.topbar form button.linkbtn:hover { background: none; }
+
+/* tabs under the top bar */
+.tabs { background: #245a51; display: flex; flex-wrap: wrap; padding: 0 20px; }
+.tabs a {
+    color: #d8efe9; text-decoration: none; padding: 12px 18px; font-size: 14px;
+    border-bottom: 3px solid transparent;
+}
+.tabs a:hover { color: white; }
+.tabs a.on { color: white; border-bottom-color: #f4d35e; font-weight: bold; }
+
+/* buttons made with <button> look the same as the link buttons */
+button.btn { border: none; cursor: pointer; font-family: inherit; }
+form button.btn.green { background-color: #05802a; }
+form button.btn.red   { background-color: rgb(223, 24, 44); }
+.btn.grey { background-color: #6c757d; }
+.btn.blue { background-color: #1d6fb8; }
+.btn.big { padding: 12px 25px; font-size: 16px; }
+
+/* filter row */
+.filters { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.filters label { font-size: 13px; color: #333; }
+.filters input, .filters select { margin: 0; }
+.filters a.btn { display: inline-block; }
+
+/* visitor form: 2 columns, 1 on phones */
+form.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+form.grid input, form.grid select { margin: 0; width: 100%; box-sizing: border-box; }
+form.grid button { grid-column: 1 / -1; }
+@media (max-width: 600px) { form.grid { grid-template-columns: 1fr; } }
+
+/* more badges */
+.badge.Inside, .badge.ENTRY { background-color: #05802a; }
+.badge.Outside, .badge.EXIT { background-color: #6c757d; }
+.badge.Registered { background-color: #1d6fb8; }
+.badge.Visitor { background-color: #8a4fb3; }
